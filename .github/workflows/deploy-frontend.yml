@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           source: "dist"
-          target: "/var/www/htmlsite/firstexam/frontend/"
+          target: "/var/www/htmlsite/firstexam/frontend/dist"
 
       - name: Restart Nginx
         uses: appleboy/ssh-action@master
