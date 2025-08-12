@@ -49,7 +49,7 @@ const Login = () => {
         }}
       >
         <Typography variant="h5" fontWeight="bold" mb={2} align="center">
-          Loginvvv
+          Login
         </Typography>
 
         <form onSubmit={handleSubmit}>
