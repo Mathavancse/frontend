@@ -25,7 +25,7 @@ const login = () => {
     <>
       login
       <form onSubmit={handlesubmit}>
-        <label>Email</label>
+        <label>namenamename</label>
         <input type="text" onChange={(e) => setemail(e.target.value)} />
         <br />
         <label>Password</label>
