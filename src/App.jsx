@@ -17,7 +17,6 @@ function App() {
             </ProtectedRoute>} />
         </Routes>
       </Router>
-      <h1>hello</h1>
     </>
   );
 }

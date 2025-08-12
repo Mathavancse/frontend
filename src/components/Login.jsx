@@ -1,42 +1,103 @@
-import React,{useState} from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { login as log } from "../services";
-import { useNavigate } from "react-router-dom"; // useNavigate is preferred
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Stack
+} from "@mui/material";
 
-const login = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-        const navigate = useNavigate();
-  
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handlesubmit = async (e) => {
-    e.preventDefault()
-    const payload = {
-      email,
-      password,
-    };
-    const res = await log(payload);
-    console.log(res);
-    
-    localStorage.setItem("token", res?.data);
-    navigate("/protected")
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = { email, password };
+    try {
+      const res = await log(payload);
+      console.log(res);
+      localStorage.setItem("token", res?.data);
+      navigate("/protected");
+    } catch (err) {
+      console.error("Login failed", err);
+    }
   };
+
   return (
-    <>
-      login
-      <form onSubmit={handlesubmit}>
-        <label>emailemail</label>
-        <input type="text" onChange={(e) => setemail(e.target.value)} />
-        <br />
-        <label>Passworddfdhjhjhjjhjf</label>
-        <input type="text" onChange={(e) => setpassword(e.target.value)} />
-        <button type="submit">submit</button>
-      </form>
-      <Link to="/register">
-        <button>reg</button>
-      </Link>
-    </>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(to right, #74ABE2, #5563DE)",
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          width: "100%",
+          maxWidth: 400,
+          borderRadius: 3,
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" mb={2} align="center">
+          Login
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              type="email"
+              fullWidth
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <TextField
+              label="Password"
+              type="password"
+              fullWidth
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{
+                backgroundColor: "#5563DE",
+                "&:hover": { backgroundColor: "#3e4fb1" },
+                py: 1.2,
+              }}
+            >
+              Submit
+            </Button>
+
+            <Typography variant="body2" align="center">
+              Don't have an account?{" "}
+              <Link to="/register" style={{ color: "#5563DE" }}>
+                Register
+              </Link>
+            </Typography>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 
-export default login;
+export default Login;
