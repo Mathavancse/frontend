@@ -28,10 +28,10 @@ jobs:
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
-            cd /var/www/htmlsite/secondexam/frontend
+            cd /var/www/htmlsite/firstexam/frontend
             git pull origin main
             npm ci --production
             npm run build
-            sudo rm -rf /var/www/htmlsite/secondexam/frontend/dist/*
-            sudo cp -r dist/* /var/www/htmlsite/secondexam/frontend/dist/
+            sudo rm -rf /var/www/htmlsite/firstexam/frontend/dist/*
+            sudo cp -r dist/* /var/www/htmlsite/firstexam/frontend/dist/
             sudo systemctl restart nginx
