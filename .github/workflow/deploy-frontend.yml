@@ -14,11 +14,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 18  # Changed from 22 to 18 for better stability
 
       - name: Install and Build
         run: |
-          npm install
+          npm ci           # Using ci instead of install for reproducible builds
           npm run build
 
       - name: Deploy via SSH
@@ -29,9 +29,9 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
             cd /var/www/htmlsite/secondexam/frontend
-            rm -rf *
             git pull origin main
-            npm install --production
-            npm run build  # Build on server to ensure compatibility
+            npm ci --production
+            npm run build
+            sudo rm -rf /var/www/htmlsite/secondexam/frontend/dist/*
             sudo cp -r dist/* /var/www/htmlsite/secondexam/frontend/dist/
             sudo systemctl restart nginx
