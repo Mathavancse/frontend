@@ -32,6 +32,6 @@ jobs:
             git pull origin main
             npm ci --production
             npm run build
-            # sudo rm -rf /var/www/htmlsite/secondexam/frontend/dist/*
+            sudo rm -rf /var/www/htmlsite/secondexam/frontend/dist/*
             sudo cp -r dist/* /var/www/htmlsite/secondexam/frontend/dist/
             sudo systemctl restart nginx
