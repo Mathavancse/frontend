@@ -1,5 +1,5 @@
 
- name: Deploy React (Vite) to AWS Lightsail
+name: Deploy React (Vite) to AWS Lightsail
 
 on:
   push:
