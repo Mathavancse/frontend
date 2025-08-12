@@ -27,8 +27,8 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          source: "dist"
-          target: "/var/www/new/frontend/"
+          source: "dist/*"
+          target: "/var/www/new/frontend/dist"
 
       - name: Restart Nginx
         uses: appleboy/ssh-action@master
