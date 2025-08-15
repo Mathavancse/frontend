@@ -51,7 +51,7 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          source: "/home/runner/work/*"
+          source: "/home/runner/work/frontend/frontend"
           target: "sudo /var/www/deploy/"
 
       - name: restart nginx
