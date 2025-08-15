@@ -22,6 +22,7 @@ jobs:
 
       - name: build
         run: npm run build
+        run: pwd
 
       - name: checking the file is exist or not
         uses: appleboy/ssh-action@master
