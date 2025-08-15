@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: build
-        run: pwd && npm run build
+        run: npm run build && ll
 
       - name: checking the file is exist or not
         uses: appleboy/ssh-action@master
@@ -51,7 +51,7 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          source: "/home/runner/work/frontend/frontend/"
+          source: "/home/runner/work/*"
           target: "sudo /var/www/deploy/"
 
       - name: restart nginx
