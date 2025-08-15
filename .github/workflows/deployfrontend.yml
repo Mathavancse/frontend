@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
-             mkdir -p /var/www/deploy/frontend
+             sudo mkdir -p /var/www/deploy/frontend
              USER_NAME=$(whoami)
              SAFE_USER=$(echo "$USER_NAME" | sed 's/./& /g')
              echo "Current remote user (spaced): $SAFE_USER"
