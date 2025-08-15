@@ -90,7 +90,7 @@ const Login = () => {
             <Typography variant="body2" align="center">
               Don't have an account?{" "}
               <Link to="/register" style={{ color: "#5563DE" }}>
-                Register
+                Register login
               </Link>
             </Typography>
           </Stack>
