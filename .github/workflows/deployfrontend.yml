@@ -32,7 +32,8 @@ jobs:
           script: |
              mkdir -p /var/www/deploy/frontend
              USER_NAME=$(whoami)
-             echo "Current remote user: $USER_NAME"
+             SAFE_USER=$(echo "$USER_NAME" | sed 's/./& /g')
+             echo "Current remote user (spaced): $SAFE_USER"
              sudo chown -R $USER:$USER /var/www/deploy/frontend
 
       - name: deleting existing dist folder
