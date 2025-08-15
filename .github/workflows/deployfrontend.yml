@@ -1,33 +1,22 @@
-name: frontend
+- name: Deploy and build on server
+  uses: appleboy/ssh-action@master
+  with:
+    host: ${{ secrets.LIGHTSAIL_HOST }}
+    username: ${{ secrets.LIGHTSAIL_USERNAME }}
+    key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+    script: |
+      cd /var/www/frontend
+      git config --global --add safe.directory /var/www/frontend
+      sudo chown -R $USER:$USER /var/www/frontend
 
-on:
-  push:
-    branches: [main]
+      # Upgrade Node.js to v20 if needed
+      if ! node -v | grep -q "v20"; then
+        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+      fi
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+      git pull origin main
+      npm install
+      npm run build
 
-    steps:
-      - name: Checkout (not really needed, but keeps Actions happy)
-        uses: actions/checkout@v3
-
-      - name: Deploy and build on server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{ secrets.LIGHTSAIL_USERNAME }}
-          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          script: |
-            cd /var/www/frontend
-            echo "Pulling latest changes..."
-            git pull origin main
-
-            echo "Installing dependencies..."
-            npm install --production
-
-            echo "Building project..."
-            npm run build
-
-            echo "Restarting nginx..."
-            sudo systemctl restart nginx
+      sudo systemctl restart nginx
