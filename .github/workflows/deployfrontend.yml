@@ -51,7 +51,7 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          source: "/home/runner/work/_actions/appleboy/ssh-action/master/frontend"
+          source: "/home/runner/work/*"
           target: "sudo /var/www/deploy/"
 
       - name: restart nginx
