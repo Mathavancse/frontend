@@ -21,7 +21,7 @@ jobs:
             
             echo "=== Creating project directory if not exists ==="
             sudo mkdir -p $PROJECT_DIR
-            sudo chown -R $USER:$USER $PROJECT_DIR
+            sudo chown -R $USER:$USER $
 
             echo "=== Install Node.js v20 if not installed ==="
             if ! node -v | grep -q "v20"; then
@@ -39,6 +39,7 @@ jobs:
 
             echo "=== Pulling latest changes ==="
             cd $PROJECT_DIR
+            git reset --hard 
             git pull origin main
 
             echo "=== Fixing permissions ==="
