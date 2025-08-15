@@ -1,22 +1,56 @@
-- name: Deploy and build on server
-  uses: appleboy/ssh-action@master
-  with:
-    host: ${{ secrets.LIGHTSAIL_HOST }}
-    username: ${{ secrets.LIGHTSAIL_USERNAME }}
-    key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-    script: |
-      cd /var/www/frontend
-      git config --global --add safe.directory /var/www/frontend
-      sudo chown -R $USER:$USER /var/www/frontend
+name: frontend-deploy
 
-      # Upgrade Node.js to v20 if needed
-      if ! node -v | grep -q "v20"; then
-        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-        sudo apt-get install -y nodejs
-      fi
+on:
+  push:
+    branches: [main]
 
-      git pull origin main
-      npm install
-      npm run build
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-      sudo systemctl restart nginx
+    steps:
+      - name: Deploy and build on Lightsail
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            PROJECT_DIR="/var/www/frontend"
+            REPO_URL="https://github.com/Mathavancse/frontend.git"
+            
+            echo "=== Creating project directory if not exists ==="
+            sudo mkdir -p $PROJECT_DIR
+            sudo chown -R $USER:$USER $PROJECT_DIR
+
+            echo "=== Install Node.js v20 if not installed ==="
+            if ! node -v | grep -q "v20"; then
+              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            echo "=== Cloning repo if missing ==="
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              git clone $REPO_URL $PROJECT_DIR
+            fi
+
+            echo "=== Setting Git safe.directory ==="
+            git config --global --add safe.directory $PROJECT_DIR
+
+            echo "=== Pulling latest changes ==="
+            cd $PROJECT_DIR
+            git pull origin main
+
+            echo "=== Fixing permissions ==="
+            sudo chown -R $USER:$USER $PROJECT_DIR
+
+            echo "=== Installing dependencies ==="
+            npm install
+
+            echo "=== Building project ==="
+            npm run build
+
+            echo "=== Restarting Nginx ==="
+            sudo systemctl restart nginx
+
+            echo "✅ Deployment completed successfully!"
