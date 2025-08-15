@@ -32,6 +32,7 @@ jobs:
           script: |
              mkdir -p /var/www/deploy/frontend
              USER_NAME=$(whoami)
+             echo "Current remote user: $USER_NAME"
              sudo chown -R $USER:$USER /var/www/deploy/frontend
 
       - name: deleting existing dist folder
