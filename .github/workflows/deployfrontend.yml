@@ -1,0 +1,70 @@
+name: frontend
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: install dependencies
+        run: npm install
+
+      - name: build
+        run: npm run build
+
+      - name: checking the file is exist or not
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            sudo mkdir -p /var/www/deploy/frontend
+            sudo chown -R $USER:$USER /var/www/deploy/frontend
+
+      - name: deleting existing dist folder
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            rm -rf /var/www/deploy/frontend/dist
+
+      - name: copying dist folder from githubaction to lightsailserver
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+          source: dist/
+          target: /var/www/deploy/frontend
+
+      - name: restart nginx
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            sudo systemctl restart nginx
+
+      
+
+        
+
+
+
+      
